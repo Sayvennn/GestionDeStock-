@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'users',
-    'products',
+    'accounts',
+    'catalogue',
+    'partenaires',
     'stock',
-    'suppliers',
 ]
+# Custom user model
+AUTH_USER_MODEL = "accounts.Employe"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
