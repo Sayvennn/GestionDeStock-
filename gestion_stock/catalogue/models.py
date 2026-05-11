@@ -9,12 +9,13 @@ class Categorie(models.Model):
     def __str__(self):
         return self.nom
 
-
 class Produit(models.Model):
     nom = models.CharField(max_length=100)
     reference = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     prix = models.DecimalField(max_digits=10, decimal_places=2)
+    seuil_alerte=models.PositiveIntegerField(default=5)
+    quantite_stock=models.PositiveBigIntegerField(default=0)
 
     categorie = models.ForeignKey(
         Categorie,
