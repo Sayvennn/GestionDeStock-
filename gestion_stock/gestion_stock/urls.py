@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('partenaires/', include('partenaires.urls')),
     path('accounts/', include('accounts.urls')),
-    path('', include('catalogue.urls')),
+    # path('', include('dashboard.urls')),
     path('catalogue/', include('catalogue.urls')),
     path('stock/', include('stock.urls')),
 ]
