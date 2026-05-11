@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="receipt-header">
+        <a href="javascript:history.back()" class="back-link">
+            <i class="fa-solid fa-chevron-left"></i> RETOUR AU JOURNAL
+        </a>
+        <h1>Opération #LOG-{{ operation.pk }}</h1>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <span class="info-label">Type de flux</span>
+            <span class="info-value">
+                <i class="fa-solid {% if operation.type_operation == 'ENTREE' %}fa-download color-success{% else %}fa-upload color-danger{% endif %}"></i>
+                {{ operation.type_operation }}
+            </span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Date d'exécution</span>
+            <span class="info-value">{{ operation.date_operation|date:"d F Y" }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Responsable</span>
+            <span class="info-value">{{ operation.employe.username }}</span>
+        </div>
+
+        <div class="info-item">
+            <span class="info-label">Statut</span>
+            <span class="info-value {% if operation.statut == 'VALIDEE' %}color-success{% else %}color-warning{% endif %}">
+                ● {{ operation.get_statut_display }}
+            </span>
+        </div>
+    </div>
+
+    <div class="glass-card manifest-card">
+        <h3>
+            <i class="fa-solid fa-list-check"></i>
+            Manifeste de Cargaison
+        </h3>
+
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>SKU / Référence</th>
+                    <th class="text-center">Quantité Transférée</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for ligne in lignes %}
+                <tr>
+                    <td class="article-name">{{ ligne.produit.nom }}</td>
+                    <td>
+                        <code>{{ ligne.produit.reference }}</code>
+                    </td>
+                    <td class="text-center">
+                        <span class="qty-pill">{{ ligne.quantite }}</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-cell">Aucune ligne trouvée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if operation.statut == 'BROUILLON' %}
+    <div class="detail-actions">
+        <button onclick="window.print()" class="print-btn">
+            <i class="fa-solid fa-print"></i> Imprimer
+        </button>
+
+        {% if operation.type_operation == 'ENTREE' %}
+        <a href="{% url 'stock:entree_validate' operation.pk %}" class="validate-btn validate-entree">
+            SCELLER LA RÉCEPTION
+        </a>
+        {% else %}
+        <a href="{% url 'stock:sortie_validate' operation.pk %}" class="validate-btn validate-sortie">
+            SCELLER L'EXPÉDITION
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/stock.js' %}"></script>
+{% endblock %}

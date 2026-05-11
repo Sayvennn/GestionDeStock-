@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="stock-form-page">
+    <div class="stock-form-card entree-card">
+        <h1>Nouvelle entrée</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Fournisseur</label>
+            <select name="fournisseur" required>
+                <option value="">Sélectionner un fournisseur</option>
+                {% for fournisseur in fournisseurs %}
+                    <option value="{{ fournisseur.id }}">{{ fournisseur.nom }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Produit</label>
+            <select name="produit" required>
+                <option value="">Sélectionner un produit</option>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}">{{ produit.nom }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Quantité</label>
+            <input type="number" name="quantite" min="1" required>
+
+            <div class="stock-form-actions">
+                <a href="{% url 'stock:entree_list' %}">Annuler</a>
+                <button type="submit" class="btn-entree">Créer l’entrée</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

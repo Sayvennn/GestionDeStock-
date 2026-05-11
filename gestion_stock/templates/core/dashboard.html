@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="dashboard-header">
+        <h1>Vue d'ensemble</h1>
+        <p>
+            Ravi de vous revoir,
+            <span>{{ user.username }}</span>.
+        </p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="glass-card stat-card stat-primary">
+            <div class="stat-label">Actifs en Stock</div>
+            <div class="counter stat-number" data-target="{{ total_produits }}">0</div>
+
+            <div class="mini-chart">
+                <div class="chart-bar chart-40"></div>
+                <div class="chart-bar chart-70"></div>
+                <div class="chart-bar chart-50"></div>
+                <div class="chart-bar chart-90"></div>
+                <div class="chart-bar chart-60"></div>
+            </div>
+
+            <i class="fa-solid fa-box stat-icon"></i>
+        </div>
+
+        <div class="glass-card stat-card stat-danger">
+            <div class="stat-label">Points de Rupture</div>
+            <div class="counter stat-number danger-number" data-target="{{ alertes_stock }}">0</div>
+
+            <div class="alert-pill">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Action requise
+            </div>
+
+            <i class="fa-solid fa-bell-concierge stat-icon"></i>
+        </div>
+
+        <div class="glass-card stat-card stat-success">
+            <div class="stat-label">Segmentation</div>
+            <div class="counter stat-number" data-target="{{ total_categories }}">0</div>
+
+            <div class="dot-row">
+                <div class="dot dot-success"></div>
+                <div class="dot dot-primary"></div>
+                <div class="dot dot-muted"></div>
+            </div>
+
+            <i class="fa-solid fa-layer-group stat-icon"></i>
+        </div>
+    </div>
+
+    <div class="glass-card system-card">
+        <div>
+            <h3>Système Opérationnel</h3>
+            <p>
+                Toutes les synchronisations sont actives. Votre inventaire contient actuellement
+                {{ total_produits }} références réparties sur {{ total_categories }} catégories.
+            </p>
+        </div>
+
+        <div class="system-time">
+            <div>Dernière mise à jour</div>
+            <strong id="current-time">--:--:--</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

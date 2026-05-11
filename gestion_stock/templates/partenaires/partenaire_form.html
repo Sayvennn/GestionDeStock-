@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ titre }} | STOCK.IO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/partenaires.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="partner-form-page">
+    <div class="partner-form-card">
+        <h1>{{ titre }}</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Nom</label>
+                <input type="text" name="nom" value="{{ partenaire.nom }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ partenaire.email|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input type="text" name="telephone" value="{{ partenaire.telephone|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label>Adresse</label>
+                <textarea name="adresse" rows="4">{{ partenaire.adresse|default:'' }}</textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="{% url 'partenaires:partenaire_list' %}">Annuler</a>
+                <button type="submit">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

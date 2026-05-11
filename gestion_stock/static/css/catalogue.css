@@ -1,0 +1,178 @@
+.catalogue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.padded-header {
+    margin-bottom: 35px;
+    padding: 10px;
+}
+
+.catalogue-header h2 {
+    font-weight: 800;
+    margin: 0;
+}
+
+.catalogue-header i {
+    color: var(--primary);
+    margin-right: 10px;
+}
+
+.catalogue-header p,
+.catalogue-form-card p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.catalogue-actions-row {
+    display: flex;
+    gap: 12px;
+}
+
+.catalogue-btn {
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.primary-btn {
+    background: var(--primary);
+}
+
+.ghost-btn {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.product-card {
+    border-top: 4px solid var(--primary);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.text-right {
+    text-align: right;
+}
+
+.strong-text {
+    font-weight: 600;
+}
+
+.primary-text {
+    color: var(--primary);
+}
+
+.muted-text {
+    color: var(--text-dim);
+}
+
+.muted-small {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.icon-link {
+    color: var(--text-dim);
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.empty-cell {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-dim);
+}
+
+.catalogue-row {
+    transition: 0.3s;
+}
+
+.catalogue-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.catalogue-form-card {
+    max-width: 650px;
+    margin: 2rem auto;
+    padding: 40px;
+}
+
+.catalogue-form-card h1 {
+    color: var(--primary);
+    margin-top: 0;
+}
+
+.catalogue-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.catalogue-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.catalogue-input-group input,
+.catalogue-input-group select,
+.catalogue-input-group textarea {
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.catalogue-input-group option {
+    background: #0f172a;
+    color: white;
+}
+
+.error-box {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.catalogue-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.catalogue-actions button,
+.catalogue-actions a {
+    flex: 1;
+    padding: 16px;
+    border-radius: 15px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.catalogue-actions button {
+    border: none;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+}
+
+.catalogue-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}

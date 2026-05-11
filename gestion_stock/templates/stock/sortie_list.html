@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="stock-header">
+        <div>
+            <h1>Bons de Livraison</h1>
+            <p>Gestion des sorties marchandises (Clients)</p>
+        </div>
+
+        <a href="{% url 'stock:sortie_add' %}" class="stock-action-btn sortie-link">
+            <i class="fa-solid fa-dolly"></i> Nouvelle Expédition
+        </a>
+    </div>
+
+    <div class="glass-card">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Statut</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for sortie in sorties %}
+                <tr class="stock-row">
+                    <td>#{{ sortie.pk }}</td>
+                    <td>{{ sortie.date_operation|date:"d/m/Y H:i" }}</td>
+
+                    <td>
+                        {% if sortie.client %}
+                            <strong>{{ sortie.client.nom }}</strong>
+                        {% else %}
+                            <span class="muted-text">Client supprimé / non défini</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <span class="badge-stock {% if sortie.statut == 'VALIDEE' %}badge-sortie{% else %}statut-brouillon{% endif %}">
+                            {{ sortie.get_statut_display }}
+                        </span>
+                    </td>
+
+                    <td class="text-right">
+                        <a href="{% url 'stock:operation_detail' sortie.pk %}" class="icon-link" title="Voir détails">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+
+                        {% if sortie.statut == 'BROUILLON' %}
+                            <a href="{% url 'stock:sortie_validate' sortie.pk %}" class="icon-link validate-icon" title="Valider la sortie">
+                                <i class="fa-solid fa-check-double"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-cell">Aucune sortie trouvée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

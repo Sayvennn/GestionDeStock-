@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/catalogue.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="glass-card fade-in">
+    <div class="catalogue-header">
+        <div>
+            <h2>
+                <i class="fa-solid fa-tags"></i>
+                Gestion des Catégories
+            </h2>
+            <p>Classement des produits du catalogue.</p>
+        </div>
+
+        <a href="{% url 'catalogue:categorie_add' %}" class="catalogue-btn primary-btn">
+            <i class="fa-solid fa-folder-plus"></i> Ajouter
+        </a>
+    </div>
+
+    <table class="modern-table">
+        <thead>
+            <tr>
+                <th>Nom de la catégorie</th>
+                <th>Description</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for cat in categories %}
+            <tr class="catalogue-row">
+                <td>
+                    <span class="strong-text">{{ cat.nom }}</span>
+                </td>
+
+                <td class="muted-text">
+                    {{ cat.description|default:"---"|truncatewords:15 }}
+                </td>
+
+                <td class="text-right">
+                    <a href="{% url 'catalogue:categorie_edit' cat.pk %}" class="icon-link">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="empty-cell">
+                    Aucune catégorie trouvée.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/catalogue.js' %}"></script>
+{% endblock %}

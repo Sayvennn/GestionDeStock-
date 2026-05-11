@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Partenaires | STOCK.IO{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/partenaires.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="partners-container">
+    <header class="page-header">
+        <div class="page-title">
+            <h1>{{ titre|default:"Écosystème Partenaires" }}</h1>
+            <p>Maîtrisez vos relations avec élégance et précision.</p>
+        </div>
+
+        <button type="button" class="add-btn" onclick="openModal()">
+            <i class="fa-solid fa-plus-circle"></i>
+            Nouveau Partenaire
+        </button>
+    </header>
+
+    <div class="table-card">
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th>Identité</th>
+                    <th>Coordonnées</th>
+                    <th>Statut</th>
+                    <th>Localisation</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="partners-body">
+                {% for p in partenaires %}
+                <tr class="row-anim">
+                    <td>
+                        <div class="partner-info">
+                            <div class="partner-avatar">{{ p.nom|slice:":1"|upper }}</div>
+                            <div>
+                                <span class="partner-name">{{ p.nom }}</span>
+                                <span class="partner-ref">REF-00{{ p.id }}</span>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="partner-email">{{ p.email|default:"---" }}</div>
+                        <div class="partner-phone">
+                            <i class="fa-solid fa-phone"></i> {{ p.telephone|default:"N/A" }}
+                        </div>
+                    </td>
+
+                    <td>
+                        {% if p.type == "Client" %}
+                            <span class="badge badge-client">CLIENT</span>
+                        {% else %}
+                            <span class="badge badge-fournisseur">FOURNISSEUR</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="partner-address">
+                        {{ p.adresse|truncatechars:30 }}
+                    </td>
+
+                    <td class="text-right">
+                        <div class="actions-cell">
+                            {% if p.type == "Client" %}
+                                <a href="{% url 'partenaires:client_edit' p.id %}" class="action-btn edit-btn" title="Modifier">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </a>
+
+                                <form method="post" action="{% url 'partenaires:client_delete' p.id %}" class="delete-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="action-btn delete-btn" title="Supprimer" onclick="return confirmDelete('ce client')">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <a href="{% url 'partenaires:fournisseur_edit' p.id %}" class="action-btn edit-btn" title="Modifier">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </a>
+
+                                <form method="post" action="{% url 'partenaires:fournisseur_delete' p.id %}" class="delete-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="action-btn delete-btn" title="Supprimer" onclick="return confirmDelete('ce fournisseur')">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        <i class="fa-solid fa-wind"></i>
+                        <span>Aucun partenaire dans la base de données.</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="partnerModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nouveau Profil</h2>
+            <button type="button" onclick="closeModal()" class="modal-close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>TYPE DE PARTENAIRE</label>
+                <select name="type_partenaire" required>
+                    <option value="client">Client</option>
+                    <option value="fournisseur">Fournisseur</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>NOM DE L'ENTITÉ</label>
+                <input type="text" name="nom" required placeholder="Ex: Lux Corp">
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" name="email" placeholder="contact@pro.com">
+                </div>
+
+                <div class="form-group">
+                    <label>CONTACT</label>
+                    <input type="text" name="telephone" placeholder="+212 ...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>LOCALISATION SIÈGE</label>
+                <textarea name="adresse" rows="3" placeholder="Adresse complète..."></textarea>
+            </div>
+
+            <button type="submit" class="add-btn submit-btn">
+                CRÉER LE PARTENAIRE
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/partenaires.js' %}"></script>
+{% endblock %}

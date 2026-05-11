@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}STOCK.IO | Premium Management{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-cube"></i>
+            </div>
+            STOCK.IO
+        </div>
+
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="{% url 'catalogue:dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-pie"></i> Dashboard
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'catalogue:produit_list' %}" class="nav-link {% if 'produit' in request.path or 'categorie' in request.path %}active{% endif %}">
+                    <i class="fa-solid fa-box-archive"></i> Inventaire
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'stock:mouvement_list' %}" class="nav-link {% if 'stock' in request.path %}active{% endif %}">
+                    <i class="fa-solid fa-arrow-right-arrow-left"></i> Flux de Stock
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{% url 'partenaires:partenaire_list' %}" class="nav-link {% if 'partenaires' in request.path %}active{% endif %}">
+                    <i class="fa-solid fa-handshake"></i> Partenaires
+                </a>
+            </li>
+
+            <li class="nav-item nav-separator">
+                <a href="#" class="nav-link">
+                    <i class="fa-solid fa-gear"></i> Paramètres
+                </a>
+            </li>
+        </ul>
+
+        <div class="logout-box">
+            <form method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="nav-link logout-btn">
+                    <i class="fa-solid fa-power-off"></i> Déconnexion
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="topbar">
+            <div class="search-trigger">
+                <i class="fa-solid fa-bars" id="toggleSidebar"></i>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-name">{{ user.username|upper }}</div>
+                    <div class="user-status">Connecté • Admin</div>
+                </div>
+
+                <div class="user-avatar">
+                    {{ user.username|slice:":1"|upper }}
+                </div>
+            </div>
+        </header>
+
+        <main class="content-area">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+
+    <script src="{% static 'js/base.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

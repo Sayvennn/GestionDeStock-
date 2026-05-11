@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/catalogue.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="catalogue-form-card glass-card fade-in">
+    <h1>Ajouter Produit</h1>
+    <p>Renseignez les informations du produit.</p>
+
+    {% if error %}
+        <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="catalogue-input-group">
+            <label>Nom du produit</label>
+            <input type="text" name="nom" required placeholder="Ex: Souris Logitech">
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Référence</label>
+            <input type="text" name="reference" required placeholder="Ex: REF-001">
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Description</label>
+            <textarea name="description" rows="4" placeholder="Description du produit..."></textarea>
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Prix</label>
+            <input type="number" name="prix" step="0.01" min="0" required placeholder="Ex: 199.99">
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Catégorie</label>
+            <select name="categorie" required>
+                <option value="">Sélectionner une catégorie</option>
+                {% for categorie in categories %}
+                    <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Fournisseur</label>
+            <select name="fournisseur" required>
+                <option value="">Sélectionner un fournisseur</option>
+                {% for fournisseur in fournisseurs %}
+                    <option value="{{ fournisseur.id }}">{{ fournisseur.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="catalogue-actions">
+            <button type="submit">Enregistrer Produit</button>
+            <a href="{% url 'catalogue:produit_list' %}">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

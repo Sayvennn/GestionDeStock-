@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="stock-header">
+        <div>
+            <h1>Flux Logistique</h1>
+            <p>Traçabilité complète des actifs</p>
+        </div>
+
+        <div class="stock-actions">
+            <a href="{% url 'stock:entree_add' %}" class="stock-action-btn entree-link">
+                <i class="fa-solid fa-arrow-trend-up"></i> Entrée Stock
+            </a>
+
+            <a href="{% url 'stock:sortie_add' %}" class="stock-action-btn sortie-link">
+                <i class="fa-solid fa-arrow-trend-down"></i> Sortie Stock
+            </a>
+        </div>
+    </div>
+
+    <div class="glass-card table-shell">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Horodatage</th>
+                    <th>Flux</th>
+                    <th>Désignation Article</th>
+                    <th>Volume</th>
+                    <th>Opérateur</th>
+                    <th class="text-right">Statut</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mvt in mouvements %}
+                <tr class="row-hover stock-row">
+                    <td class="muted-date">
+                        <i class="fa-regular fa-clock"></i>
+                        {{ mvt.date_mouvement|date:"d M Y | H:i" }}
+                    </td>
+
+                    <td>
+                        <span class="type-badge {% if mvt.type_mouvement == 'ENTREE' %}type-entree{% else %}type-sortie{% endif %}">
+                            {{ mvt.type_mouvement }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="article-name">{{ mvt.produit.nom }}</div>
+                        <div class="article-ref">REF: {{ mvt.produit.reference }}</div>
+                    </td>
+
+                    <td>
+                        <span class="qty-display {% if mvt.type_mouvement == 'ENTREE' %}color-success{% else %}color-danger{% endif %}">
+                            {% if mvt.type_mouvement == 'ENTREE' %}+{% else %}-{% endif %}{{ mvt.ligne_operation.quantite }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="operator">
+                            <div class="operator-avatar">
+                                {{ mvt.operation.employe.username|slice:":1"|upper }}
+                            </div>
+                            <span>{{ mvt.operation.employe.username }}</span>
+                        </div>
+                    </td>
+
+                    <td class="text-right certified">
+                        <i class="fa-solid fa-shield-check"></i> CERTIFIÉ
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-cell">Aucun mouvement trouvé.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/stock.js' %}"></script>
+{% endblock %}

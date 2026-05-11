@@ -1,36 +1,27 @@
 from django.conf import settings
+from abc import abstractmethod
 from django.core.exceptions import ValidationError
-from django.db import models
+from django.db import models,transaction
 
 from catalogue.models import Produit
-from partenaires.models import Client
+from partenaires.models import Client,Fournisseur
 
-
-class OperationStock(models.Model):
-    TYPE_OPERATION = [
-        ("ENTREE", "Entrée"),
-        ("SORTIE", "Sortie"),
-    ]
-
-    STATUT_CHOICES = [
+STATUT_CHOICES = [
         ("BROUILLON", "Brouillon"),
         ("VALIDEE", "Validée"),
         ("ANNULEE", "Annulée"),
     ]
 
-    type_operation = models.CharField(max_length=10, choices=TYPE_OPERATION)
+class OperationStock(models.Model): 
+
+    TYPE_OPERATION_CHOICES = [
+        ('ENTREE', 'Entrée'),
+        ('SORTIE', 'Sortie'),
+    ]
 
     employe = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
-        related_name="operations_stock"
-    )
-
-    client = models.ForeignKey(
-        Client,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
         related_name="operations_stock"
     )
 
@@ -42,15 +33,57 @@ class OperationStock(models.Model):
         default="BROUILLON"
     )
 
-    def clean(self):
-        if self.type_operation == "SORTIE" and not self.client:
-            raise ValidationError("Une sortie doit avoir un client.")
+    type_operation = models.CharField(
+        max_length=10,
+        choices=TYPE_OPERATION_CHOICES
+    )
 
-        if self.type_operation == "ENTREE" and self.client:
-            raise ValidationError("Une entrée ne doit pas avoir de client.")
+    # Champs spécifiques aux entrées
+    fournisseur = models.ForeignKey(
+        Fournisseur,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="operations_entree"
+    )
+
+    # Champs spécifiques aux sorties
+    client = models.ForeignKey(
+        Client,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="operations_sortie"
+    )
+
+    class Meta:
+        app_label = 'stock'
+
+    def getTypeOperation(self):
+        return self.type_operation
+
+    def valider(self):
+        if self.mouvements.exists():
+            return
+
+        with transaction.atomic():
+            if self.type_operation == 'ENTREE':
+                for l in self.lignes.select_related("produit"):
+                    l.produit.quantite_stock += l.quantite
+                    l.produit.save()
+                    l.createMvtStock()
+            elif self.type_operation == 'SORTIE':
+                for l in self.lignes.select_related("produit"):
+                    if not l.estStockSuffisant():
+                        raise ValidationError(
+                            f"Stock insuffisant pour {l.produit.nom}"
+                        )
+                    l.produit.quantite_stock -= l.quantite
+                    l.produit.save()
+                    l.createMvtStock()
 
     def __str__(self):
-        return f"{self.type_operation} #{self.id}"
+        return f"Opération {self.type_operation} - {self.date_operation}"
 
 
 class LigneOperation(models.Model):
@@ -67,10 +100,20 @@ class LigneOperation(models.Model):
     )
 
     quantite = models.PositiveIntegerField()
-    # prix = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def createMvtStock(self):
+        return MouvementStock.objects.create(
+            operation=self.operation,
+            ligne_operation=self,
+            produit=self.produit,
+            type_mouvement=self.operation.type_operation,
+        )
 
     def __str__(self):
         return f"{self.produit.nom} x {self.quantite}"
+    
+    def estStockSuffisant(self):
+        return self.quantite<=self.produit.quantite_stock
 
 
 class MouvementStock(models.Model):
@@ -97,9 +140,29 @@ class MouvementStock(models.Model):
         related_name="mouvements_stock"
     )
 
-    type_mouvement = models.CharField(max_length=10, choices=TYPE_MOUVEMENT)
-    quantite = models.PositiveIntegerField()
+    type_mouvement = models.CharField(
+        max_length=20,
+        choices=TYPE_MOUVEMENT
+    )
+
     date_mouvement = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.type_mouvement} - {self.produit.nom} ({self.quantite})"
+        return f"{self.produit.nom} - {self.type_mouvement} ({self.date_mouvement})"
+
+    type_mouvement = models.CharField(
+        max_length=20,
+        choices=TYPE_MOUVEMENT
+    )
+
+    date_mouvement = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.produit.nom} - {self.type_mouvement} ({self.date_mouvement})"
+
+    type_mouvement = models.CharField(max_length=10, choices=TYPE_MOUVEMENT)
+    # quantite = models.PositiveIntegerField()
+    date_mouvement = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.type_mouvement} - {self.produit.nom} ({self.ligne_operation.quantite})"

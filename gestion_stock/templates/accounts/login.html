@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>STOCK.IO | Connexion Employé</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo-box">S</div>
+        <div class="brand">STOCK.IO</div>
+        <div class="subtitle">Espace Employé</div>
+
+        {% if form.errors %}
+            <div class="error-box">
+                Nom d'utilisateur ou mot de passe incorrect.
+            </div>
+        {% endif %}
+
+        <form method="POST" id="loginForm">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="id_username">Nom d'utilisateur</label>
+                <input type="text" name="username" id="id_username" required autofocus>
+            </div>
+
+            <div class="field">
+                <label for="id_password">Mot de passe</label>
+                <div class="password-wrap">
+                    <input type="password" name="password" id="id_password" required>
+                    <button type="button" class="toggle-password" id="togglePassword">Afficher</button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                Se connecter
+            </button>
+        </form>
+
+        <div class="hint">Accès réservé aux employés autorisés.</div>
+    </div>
+
+    <script src="{% static 'js/auth.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/catalogue.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="catalogue-form-card glass-card fade-in">
+    <h1>
+        {% if categorie %}Modifier Catégorie{% else %}Nouvelle Catégorie{% endif %}
+    </h1>
+
+    {% if error %}
+        <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="catalogue-input-group">
+            <label>Nom de la catégorie</label>
+            <input type="text" name="nom" value="{{ categorie.nom|default:'' }}" required>
+        </div>
+
+        <div class="catalogue-input-group">
+            <label>Description</label>
+            <textarea name="description" rows="4">{{ categorie.description|default:'' }}</textarea>
+        </div>
+
+        <div class="catalogue-actions">
+            <button type="submit">Enregistrer</button>
+            <a href="{% url 'catalogue:categorie_list' %}">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

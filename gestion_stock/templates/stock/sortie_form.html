@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="stock-form-page">
+    <div class="stock-form-card sortie-card">
+        <h1>Nouvelle sortie</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label>Client</label>
+            <select name="client" required>
+                <option value="">Sélectionner un client</option>
+                {% for client in clients %}
+                    <option value="{{ client.id }}">{{ client.nom }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Produit</label>
+            <select name="produit" required>
+                <option value="">Sélectionner un produit</option>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}">{{ produit.nom }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Quantité</label>
+            <input type="number" name="quantite" min="1" required>
+
+            <div class="stock-form-actions">
+                <a href="{% url 'stock:sortie_list' %}">Annuler</a>
+                <button type="submit" class="btn-sortie">Créer la sortie</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
