@@ -3,14 +3,74 @@ from django.shortcuts import get_object_or_404, redirect, render
 from partenaires.models import Fournisseur
 from .models import Categorie, Produit
 
+from django.db.models import Sum
+from django.db.models.functions import TruncDate
+from stock.models import MouvementStock
+from django.db.models import F
+
+
+
 
 def dashboard(request):
+    entrees = (
+        MouvementStock.objects
+        .filter(type_mouvement="ENTREE")
+        .annotate(jour=TruncDate("date_mouvement"))
+        .values("jour")
+        .annotate(total=Sum("ligne_operation__quantite"))
+        .order_by("jour")
+    )
+
+    sorties = (
+        MouvementStock.objects
+        .filter(type_mouvement="SORTIE")
+        .annotate(jour=TruncDate("date_mouvement"))
+        .values("jour")
+        .annotate(total=Sum("ligne_operation__quantite"))
+        .order_by("jour")
+    )
+
+    entrees_dict = {
+        item["jour"]: item["total"] or 0
+        for item in entrees
+        if item["jour"]
+    }
+
+    sorties_dict = {
+        item["jour"]: item["total"] or 0
+        for item in sorties
+        if item["jour"]
+    }
+
+    jours = sorted(set(entrees_dict.keys()) | set(sorties_dict.keys()))
+
+    chart_points = [
+        {
+            "date": jour.strftime("%d/%m/%Y"),
+            "entree": entrees_dict.get(jour, 0),
+            "sortie": sorties_dict.get(jour, 0),
+        }
+        for jour in jours
+    ]
+
     context = {
         "total_produits": Produit.objects.count(),
         "total_categories": Categorie.objects.count(),
         "alertes_stock": 0,
+        "chart_points": chart_points,
+        "produits_rupture": Produit.objects.filter(
+         quantite_stock__lte=F("seuil_alerte")
+        ).select_related("categorie", "fournisseur"),
+        "alertes_stock": Produit.objects.filter(
+        quantite_stock__lte=F("seuil_alerte")
+        ).count(),
+
     }
+
     return render(request, "core/dashboard.html", context)
+#les graphes
+
+
 
 
 def produit_list(request):

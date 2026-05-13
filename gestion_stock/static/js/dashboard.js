@@ -43,4 +43,126 @@ document.addEventListener("DOMContentLoaded", () => {
             card.style.transform = "translateY(0)";
         }, 100 * index);
     });
+        function createLineChart(canvasId, label, data, color) {
+        const canvas = document.getElementById(canvasId);
+
+        if (!canvas || typeof Chart === "undefined") {
+            return;
+        }
+
+        new Chart(canvas, {
+            type: "line",
+            data: {
+                labels: window.stockChartLabels || [],
+                datasets: [{
+                    label: label,
+                    data: data || [],
+                    borderColor: color,
+                    backgroundColor: color.replace("1)", "0.12)"),
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: "#f8fafc"
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: "#94a3b8" },
+                        grid: { color: "rgba(255,255,255,0.06)" }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: "#94a3b8" },
+                        grid: { color: "rgba(255,255,255,0.06)" }
+                    }
+                }
+            }
+        });
+    }
+
+    createLineChart(
+        "importChart",
+        "Quantité importée",
+        window.stockChartEntrees,
+        "rgba(16, 185, 129, 1)"
+    );
+
+    createLineChart(
+        "exportChart",
+        "Quantité exportée",
+        window.stockChartSorties,
+        "rgba(244, 63, 94, 1)"
+    );
+        const chartRows = document.querySelectorAll("#chart-data span");
+
+    const labels = [];
+    const entrees = [];
+    const sorties = [];
+
+    chartRows.forEach((row) => {
+        labels.push(row.dataset.date);
+        entrees.push(Number(row.dataset.entree) || 0);
+        sorties.push(Number(row.dataset.sortie) || 0);
+    });
+
+    function createLineChart(canvasId, label, data, color) {
+        const canvas = document.getElementById(canvasId);
+
+        if (!canvas || typeof Chart === "undefined") {
+            return;
+        }
+
+        new Chart(canvas, {
+            type: "line",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    borderColor: color,
+                    backgroundColor: color.replace("1)", "0.12)"),
+                    borderWidth: 3,
+                    tension: 0.35,
+                    fill: true,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { color: "#94a3b8" },
+                        grid: { color: "rgba(255,255,255,0.06)" }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: "#94a3b8" },
+                        grid: { color: "rgba(255,255,255,0.06)" }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: "#f8fafc" }
+                    }
+                }
+            }
+        });
+    }
+
+    createLineChart("importChart", "Quantité importée", entrees, "rgba(16, 185, 129, 1)");
+    createLineChart("exportChart", "Quantité exportée", sorties, "rgba(244, 63, 94, 1)");
+
+
 });

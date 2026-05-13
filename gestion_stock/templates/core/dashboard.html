@@ -57,6 +57,40 @@
         </div>
     </div>
 
+    <div class="charts-grid">
+        <div class="glass-card chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Importations</h3>
+                    <p>Entrées de stock par rapport au temps</p>
+                </div>
+                <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <canvas id="importChart"></canvas>
+        </div>
+
+        <div class="glass-card chart-card">
+            <div class="chart-header">
+                <div>
+                    <h3>Exportations</h3>
+                    <p>Sorties de stock par rapport au temps</p>
+                </div>
+                <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+            <canvas id="exportChart"></canvas>
+        </div>
+    </div>
+
+    <div id="chart-data" style="display: none;">
+        {% for point in chart_points %}
+            <span
+                data-date="{{ point.date }}"
+                data-entree="{{ point.entree }}"
+                data-sortie="{{ point.sortie }}">
+            </span>
+        {% endfor %}
+    </div>
+
     <div class="glass-card system-card">
         <div>
             <h3>Système Opérationnel</h3>
@@ -72,8 +106,42 @@
         </div>
     </div>
 </div>
+<div class="glass-card rupture-card">
+    <h3>Produits en rupture ou alerte</h3>
+
+    <table class="modern-table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Référence</th>
+                <th>Stock</th>
+                <th>Seuil</th>
+                <th>Fournisseur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits_rupture %}
+            <tr>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.reference }}</td>
+                <td style="color: #f87171; font-weight: 800;">{{ produit.quantite_stock }}</td>
+                <td>{{ produit.seuil_alerte }}</td>
+                <td>{{ produit.fournisseur.nom }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center; color: var(--text-dim); padding: 2rem;">
+                    Aucun produit en rupture.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

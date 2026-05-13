@@ -219,3 +219,42 @@
         transform: scaleY(1);
     }
 }
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.chart-card {
+    min-height: 360px;
+}
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chart-header h3 {
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+}
+
+.chart-header p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+}
+
+.chart-header i {
+    font-size: 1.8rem;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 260px !important;
+}
+

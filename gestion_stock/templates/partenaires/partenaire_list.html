@@ -21,6 +21,33 @@
         </button>
     </header>
 
+    <div class="partner-toolbar">
+        <div class="partner-switch">
+            <a href="{% url 'partenaires:partenaire_list' %}" class="{% if mode == 'all' %}active{% endif %}">
+                Tous
+            </a>
+
+            <a href="{% url 'partenaires:client_list' %}" class="{% if mode == 'client' %}active{% endif %}">
+                Clients
+            </a>
+
+            <a href="{% url 'partenaires:fournisseur_list' %}" class="{% if mode == 'fournisseur' %}active{% endif %}">
+                Fournisseurs
+            </a>
+        </div>
+
+        <div class="partner-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="partnerSearch" placeholder="Rechercher par nom, email, téléphone...">
+        </div>
+
+        <select id="partnerTypeFilter" class="partner-filter">
+            <option value="all">Tous les types</option>
+            <option value="Client">Clients</option>
+            <option value="Fournisseur">Fournisseurs</option>
+        </select>
+    </div>
+
     <div class="table-card">
         <table class="premium-table">
             <thead>
@@ -35,7 +62,9 @@
 
             <tbody id="partners-body">
                 {% for p in partenaires %}
-                <tr class="row-anim">
+                <tr class="row-anim partner-row"
+                    data-type="{{ p.type }}"
+                    data-search="{{ p.nom|default:'' }} {{ p.email|default:'' }} {{ p.telephone|default:'' }} {{ p.adresse|default:'' }}">
                     <td>
                         <div class="partner-info">
                             <div class="partner-avatar">{{ p.nom|slice:":1"|upper }}</div>
@@ -62,7 +91,7 @@
                     </td>
 
                     <td class="partner-address">
-                        {{ p.adresse|truncatechars:30 }}
+                        {{ p.adresse|default:"---"|truncatechars:30 }}
                     </td>
 
                     <td class="text-right">
@@ -101,6 +130,12 @@
                     </td>
                 </tr>
                 {% endfor %}
+
+                <tr id="noPartnerResults" class="no-results">
+                    <td colspan="5">
+                        Aucun partenaire ne correspond à votre recherche.
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

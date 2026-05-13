@@ -361,3 +361,11 @@
 .validate-icon {
     color: var(--success);
 }
+
+.cancel-icon {
+    color: #f59e0b;
+}
+
+.cancel-icon:hover {
+    color: #fbbf24;
+}

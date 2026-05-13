@@ -1,14 +1,19 @@
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
-from .models import OperationStockEntree, OperationStockSortie, LigneOperation, MouvementStock
 
-# 1. Gestion des lignes en ligne (Inline)
+from .models import (
+    LigneOperation,
+    MouvementStock,
+    OperationStockEntree,
+    OperationStockSortie,
+)
+
+
 class LigneOperationInline(admin.TabularInline):
     model = LigneOperation
     extra = 1
-    fields = ('produit', 'quantite')
+    fields = ("produit", "quantite")
 
-# 2. Admin pour les ENTRÉES (Fournisseurs)
 
 @admin.register(OperationStockEntree)
 class OperationStockEntreeAdmin(admin.ModelAdmin):
@@ -17,26 +22,32 @@ class OperationStockEntreeAdmin(admin.ModelAdmin):
     search_fields = ("fournisseur__nom", "employe__username")
     inlines = [LigneOperationInline]
     fields = ("employe", "fournisseur", "statut")
+    readonly_fields = ("statut",)
+    actions = ("valider_operations", "annuler_operations")
 
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-
-        operation = form.instance
-
-        if operation.statut == "VALIDEE":
+    @admin.action(description="Valider les entrées sélectionnées")
+    def valider_operations(self, request, queryset):
+        for operation in queryset:
             try:
                 operation.valider()
+                messages.success(request, f"Entrée #{operation.pk} validée.")
             except ValidationError as e:
-                messages.error(request, e.message)
-        elif operation.statut=="ANNULEE":
+                messages.error(request, f"Entrée #{operation.pk} : {e.message}")
+            except Exception as e:
+                messages.error(request, f"Entrée #{operation.pk} : {str(e)}")
+
+    @admin.action(description="Annuler les entrées sélectionnées")
+    def annuler_operations(self, request, queryset):
+        for operation in queryset:
             try:
                 operation.annuler()
+                messages.success(request, f"Entrée #{operation.pk} annulée.")
             except ValidationError as e:
-                messages.error(request, e.message)
+                messages.error(request, f"Entrée #{operation.pk} : {e.message}")
+            except Exception as e:
+                messages.error(request, f"Entrée #{operation.pk} : {str(e)}")
 
 
-
-# 3. Admin pour les SORTIES (Clients)
 @admin.register(OperationStockSortie)
 class OperationStockSortieAdmin(admin.ModelAdmin):
     list_display = ("id", "client", "employe", "statut", "date_operation")
@@ -44,26 +55,32 @@ class OperationStockSortieAdmin(admin.ModelAdmin):
     search_fields = ("client__nom", "employe__username")
     inlines = [LigneOperationInline]
     fields = ("employe", "client", "statut")
+    readonly_fields = ("statut",)
+    actions = ("valider_operations", "annuler_operations")
 
-    def save_related(self, request, form, formsets, change):
-        super().save_related(request, form, formsets, change)
-
-        operation = form.instance
-
-        if operation.statut == "VALIDEE":
+    @admin.action(description="Valider les sorties sélectionnées")
+    def valider_operations(self, request, queryset):
+        for operation in queryset:
             try:
                 operation.valider()
+                messages.success(request, f"Sortie #{operation.pk} validée.")
             except ValidationError as e:
-                messages.error(request, e.message)
-        elif operation.statut=="ANNULEE":
+                messages.error(request, f"Sortie #{operation.pk} : {e.message}")
+            except Exception as e:
+                messages.error(request, f"Sortie #{operation.pk} : {str(e)}")
+
+    @admin.action(description="Annuler les sorties sélectionnées")
+    def annuler_operations(self, request, queryset):
+        for operation in queryset:
             try:
                 operation.annuler()
+                messages.success(request, f"Sortie #{operation.pk} annulée.")
             except ValidationError as e:
-                messages.error(request, e.message)
+                messages.error(request, f"Sortie #{operation.pk} : {e.message}")
+            except Exception as e:
+                messages.error(request, f"Sortie #{operation.pk} : {str(e)}")
 
 
-
-# 4. Historique des mouvements (Lecture seule recommandée)
 @admin.register(MouvementStock)
 class MouvementStockAdmin(admin.ModelAdmin):
     list_display = (
@@ -74,6 +91,14 @@ class MouvementStockAdmin(admin.ModelAdmin):
         "operation",
     )
     list_filter = ("type_mouvement", "date_mouvement")
+    search_fields = ("produit__nom", "produit__reference")
+    readonly_fields = (
+        "operation",
+        "ligne_operation",
+        "produit",
+        "type_mouvement",
+        "date_mouvement",
+    )
 
     def has_add_permission(self, request):
         return False

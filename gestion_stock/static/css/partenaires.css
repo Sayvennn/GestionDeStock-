@@ -331,3 +331,62 @@ select option {
         opacity: 1;
     }
 }
+.partner-toolbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.partner-switch {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+}
+
+.partner-switch a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.partner-switch a.active,
+.partner-switch a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.partner-search {
+    position: relative;
+}
+
+.partner-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+}
+
+.partner-search input {
+    padding-left: 42px;
+}
+
+.partner-filter {
+    min-width: 180px;
+}
+
+.no-results {
+    display: none;
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-dim);
+}
+

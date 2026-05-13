@@ -35,6 +35,8 @@ def liste_partenaires(request):
     return render(request, "partenaires/partenaire_list.html", {
         "partenaires": partenaires,
         "titre": "Liste des Partenaires",
+         "mode": "all",
+
     })
 
 
@@ -47,6 +49,7 @@ def liste_clients(request):
     return render(request, "partenaires/partenaire_list.html", {
         "partenaires": partenaires,
         "titre": "Liste des Clients",
+        "mode": "client",
     })
 
 
@@ -59,6 +62,8 @@ def liste_fournisseurs(request):
     return render(request, "partenaires/partenaire_list.html", {
         "partenaires": partenaires,
         "titre": "Liste des Fournisseurs",
+        "mode": "fournisseur",
+
     })
 
 
