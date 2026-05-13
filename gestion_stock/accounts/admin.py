@@ -1,8 +1,16 @@
 from django.contrib import admin
-from .models import Employe
 from django.contrib.auth.admin import UserAdmin
 
-# Register your models here.
+from .models import Employe
+
+
 @admin.register(Employe)
 class EmployeAdmin(UserAdmin):
-     search_fields = ("username", "email")
+    list_display = ("username", "email", "telephone", "is_staff", "is_superuser")
+    search_fields = ("username", "email", "telephone")
+
+    fieldsets = UserAdmin.fieldsets + (
+        ("Informations employé", {
+            "fields": ("telephone", "adresse"),
+        }),
+    )

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in">
+    <div class="stock-header">
+        <div>
+            <h1>Opérations de Stock</h1>
+            <p>Les opérations en brouillon doivent être validées avant de créer un mouvement réel.</p>
+        </div>
+
+        <div class="stock-actions">
+            <a href="{% url 'stock:entree_add' %}" class="stock-action-btn entree-link">
+                <i class="fa-solid fa-arrow-trend-up"></i> Nouvelle entrée
+            </a>
+
+            <a href="{% url 'stock:sortie_add' %}" class="stock-action-btn sortie-link">
+                <i class="fa-solid fa-arrow-trend-down"></i> Nouvelle sortie
+            </a>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Partenaire</th>
+                    <th>Date</th>
+                    <th>Employé</th>
+                    <th>Statut</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in operations %}
+                <tr class="stock-row">
+                    <td>#{{ item.objet.pk }}</td>
+
+                    <td>
+                        {% if item.type == "ENTREE" %}
+                            <span class="type-badge type-entree">ENTREE</span>
+                        {% else %}
+                            <span class="type-badge type-sortie">SORTIE</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if item.partenaire %}
+                            {{ item.partenaire.nom }}
+                        {% else %}
+                            ---
+                        {% endif %}
+                    </td>
+
+                    <td>{{ item.objet.date_operation|date:"d/m/Y H:i" }}</td>
+                    <td>{{ item.objet.employe.username }}</td>
+
+                    <td>
+                        <strong>{{ item.objet.get_statut_display }}</strong>
+                    </td>
+
+                    <td class="text-right">
+                        <a href="{% url 'stock:operation_detail' item.objet.pk %}" class="icon-link">
+                            <i class="fa-solid fa-eye"></i>
+                        </a>
+
+                        {% if item.objet.statut == "BROUILLON" %}
+                            {% if item.type == "ENTREE" %}
+                                <a href="{% url 'stock:entree_validate' item.objet.pk %}" class="icon-link validate-icon" title="Valider">
+                                    <i class="fa-solid fa-check-double"></i>
+                                </a>
+                                <a href="{% url 'stock:entree_cancel' item.objet.pk %}" class="icon-link cancel-icon" title="Annuler">
+                                    <i class="fa-solid fa-ban"></i>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'stock:sortie_validate' item.objet.pk %}" class="icon-link validate-icon" title="Valider">
+                                    <i class="fa-solid fa-check-double"></i>
+                                </a>
+                                <a href="{% url 'stock:sortie_cancel' item.objet.pk %}" class="icon-link cancel-icon" title="Annuler">
+                                    <i class="fa-solid fa-ban"></i>
+                                </a>
+                                <a href="{% url 'stock:mouvement_list' %}" class="stock-action-btn">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Journal des mouvements
+                                </a>
+
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="empty-cell">
+                        Aucune opération trouvée.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
