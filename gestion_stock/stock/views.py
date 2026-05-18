@@ -15,8 +15,8 @@ from .models import (
 
 @login_required(login_url="accounts:login")
 def liste_operations(request):
-    entrees = list(OperationStockEntree.objects.select_related("fournisseur", "employe"))
-    sorties = list(OperationStockSortie.objects.select_related("client", "employe"))
+    entrees = list(OperationStockEntree.objects.filter(employe=request.user).select_related("fournisseur", "employe"))
+    sorties = list(OperationStockSortie.objects.filter(employe=request.user).select_related("client", "employe"))
 
     operations = []
 
@@ -25,6 +25,7 @@ def liste_operations(request):
             "objet": operation,
             "type": "ENTREE",
             "partenaire": operation.fournisseur,
+            "produit": operation.lignes,
         })
 
     for operation in sorties:
@@ -32,6 +33,7 @@ def liste_operations(request):
             "objet": operation,
             "type": "SORTIE",
             "partenaire": operation.client,
+            "produit": operation.lignes.select_related("produit").all(),
         })
 
     operations.sort(key=lambda item: item["objet"].date_operation, reverse=True)

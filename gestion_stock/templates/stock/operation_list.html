@@ -29,10 +29,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <!-- <th>Produit</th> -->
                     <th>Type</th>
                     <th>Partenaire</th>
                     <th>Date</th>
-                    <th>Employé</th>
                     <th>Statut</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -42,6 +42,7 @@
                 {% for item in operations %}
                 <tr class="stock-row">
                     <td>#{{ item.objet.pk }}</td>
+                    <!-- <td>{{item.produit.nom}}</td> -->
 
                     <td>
                         {% if item.type == "ENTREE" %}
@@ -60,7 +61,6 @@
                     </td>
 
                     <td>{{ item.objet.date_operation|date:"d/m/Y H:i" }}</td>
-                    <td>{{ item.objet.employe.username }}</td>
 
                     <td>
                         <strong>{{ item.objet.get_statut_display }}</strong>

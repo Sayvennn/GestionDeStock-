@@ -34,6 +34,7 @@
                 <th>Référence</th>
                 <th>Catégorie</th>
                 <th>Fournisseur</th>
+                <th>Quantite</th>
                 <th>Prix</th>
             </tr>
         </thead>
@@ -50,6 +51,7 @@
                 <td>{{ produit.reference }}</td>
                 <td>{{ produit.categorie.nom }}</td>
                 <td>{{ produit.fournisseur.nom }}</td>
+                <td>{{produit.quantite_stock}}</td>
                 <td><strong>{{ produit.prix }} DH</strong></td>
             </tr>
             {% empty %}

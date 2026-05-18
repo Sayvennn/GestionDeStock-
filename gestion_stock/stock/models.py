@@ -61,8 +61,14 @@ class OperationStockEntree(OperationStock):
                 l.produit.quantite_stock += l.quantite
                 l.produit.save()
                 l.createMvtStock()
+                self.statut="VALIDEE"
+                self.save()
     
     def annuler(self):
+        if self.statut=="BROUILLON":
+            self.statut="ANNULEE"
+            self.save() 
+            return
         if not self.mouvements.exists():
             return
         print("Annulation de l'entrée, retrait du stock des produits...")
@@ -107,6 +113,9 @@ class OperationStockSortie(OperationStock):
                 l.produit.quantite_stock -= l.quantite
                 l.produit.save()
                 l.createMvtStock()
+                self.statut="VALIDEE"
+                self.save()
+                print("mvt added")
     
     def annuler(self):
         if not self.mouvements.exists():

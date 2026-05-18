@@ -85,15 +85,13 @@ WSGI_APPLICATION = 'gestion_stock.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestionDeStock',
+        'NAME': 'gestion_stock_db',
         'USER': 'postgres',
-        'PASSWORD': 'Mehdi2004',
+        'PASSWORD': '123456789',
         'HOST': 'localhost',
         'PORT': '5432',
     }
