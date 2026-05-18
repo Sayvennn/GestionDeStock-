@@ -8,14 +8,18 @@
 {% block content %}
 <div class="stock-form-page">
     <div class="stock-form-card entree-card">
-        <h1>Nouvelle entrée</h1>
+        <a href="{% url 'stock:operation_list' %}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Retour aux operations
+        </a>
+
+        <h1>Nouvelle entree</h1>
 
         <form method="post">
             {% csrf_token %}
 
             <label>Fournisseur</label>
             <select name="fournisseur" required>
-                <option value="">Sélectionner un fournisseur</option>
+                <option value="">Selectionner un fournisseur</option>
                 {% for fournisseur in fournisseurs %}
                     <option value="{{ fournisseur.id }}">{{ fournisseur.nom }}</option>
                 {% endfor %}
@@ -23,19 +27,21 @@
 
             <label>Produit</label>
             <select name="produit" required>
-                <option value="">Sélectionner un produit</option>
+                <option value="">Selectionner un produit</option>
                 {% for produit in produits %}
                     <option value="{{ produit.id }}">{{ produit.nom }}</option>
                 {% endfor %}
             </select>
 
-            <label>Quantité</label>
+            <label>Quantite</label>
             <input type="number" name="quantite" min="1" required>
 
             <div class="stock-form-actions">
-              <a href="{% url 'stock:operation_list' %}">Annuler</a>
+              <a href="{% url 'stock:operation_list' %}">
+                  <i class="fa-solid fa-arrow-left"></i> Annuler
+              </a>
 
-                <button type="submit" class="btn-entree">Créer l’entrée</button>
+                <button type="submit" class="btn-entree">Creer l'entree</button>
             </div>
         </form>
     </div>

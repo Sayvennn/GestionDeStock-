@@ -7,8 +7,12 @@
 
 {% block content %}
 <div class="catalogue-form-card glass-card fade-in">
+    <a href="{% url 'catalogue:categorie_list' %}" class="back-link">
+        <i class="fa-solid fa-arrow-left"></i> Retour aux categories
+    </a>
+
     <h1>
-        {% if categorie %}Modifier Catégorie{% else %}Nouvelle Catégorie{% endif %}
+        {% if categorie %}Modifier Categorie{% else %}Nouvelle Categorie{% endif %}
     </h1>
 
     {% if error %}
@@ -19,7 +23,7 @@
         {% csrf_token %}
 
         <div class="catalogue-input-group">
-            <label>Nom de la catégorie</label>
+            <label>Nom de la categorie</label>
             <input type="text" name="nom" value="{{ categorie.nom|default:'' }}" required>
         </div>
 
@@ -30,7 +34,9 @@
 
         <div class="catalogue-actions">
             <button type="submit">Enregistrer</button>
-            <a href="{% url 'catalogue:categorie_list' %}">Annuler</a>
+            <a href="{% url 'catalogue:categorie_list' %}">
+                <i class="fa-solid fa-arrow-left"></i> Annuler
+            </a>
         </div>
     </form>
 </div>

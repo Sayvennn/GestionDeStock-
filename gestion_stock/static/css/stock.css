@@ -369,3 +369,228 @@
 .cancel-icon:hover {
     color: #fbbf24;
 }
+
+/* --- PARTIE CORRIGÉE POUR LA BARRE DE PARTENAIRES --- */
+
+.partner-toolbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    align-items: center; /* Aligne verticalement tous les blocs au centre */
+    margin-bottom: 24px;
+}
+
+.partner-switch {
+    display: flex;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+}
+
+.partner-switch a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.partner-switch a.active,
+.partner-switch a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.partner-search {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.partner-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dim);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.partner-search input {
+    width: 100%;
+    padding: 12px 12px 12px 42px; /* Uniformisation du padding */
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: white;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.operation-filters {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    background: rgba(15, 23, 42, 0.72);
+    box-sizing: border-box;
+}
+
+.operation-filters .partner-search {
+    flex: 1 1 360px;
+    min-width: 260px;
+}
+
+.operation-filters .partner-search input {
+    height: 46px;
+    font-size: 0.9rem;
+}
+
+.filter-control {
+    flex: 0 0 190px;
+    min-width: 170px;
+    height: 46px;
+    padding: 0 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #111827;
+    color: white;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.filter-control option {
+    background: #0f172a;
+    color: white;
+}
+
+.filter-submit {
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    color: white;
+    cursor: pointer;
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.filter-reset {
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    color: var(--text-dim);
+    box-sizing: border-box;
+}
+
+@media (max-width: 980px) {
+    .operation-filters .partner-search {
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .stock-header,
+    .stock-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .operation-filters > * {
+        flex: 1 1 100%;
+    }
+}
+
+.partner-filter {
+    min-width: 180px;
+}
+
+.partner-filter select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    color: white;
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 45px; /* Aligne parfaitement la hauteur avec le champ input */
+}
+
+/* Barre de recherche stock alignee sur la page Partenaires */
+.stock-toolbar {
+    display: grid;
+    grid-template-columns: auto 1fr 190px;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.stock-toolbar .partner-switch button {
+    color: var(--text-dim);
+    text-decoration: none;
+    border: 0;
+    background: transparent;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.stock-toolbar .partner-switch button.active,
+.stock-toolbar .partner-switch button:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.stock-toolbar .partner-search input {
+    height: 46px;
+}
+
+.stock-toolbar .partner-filter {
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: white;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.stock-toolbar .partner-filter option {
+    background: #0f172a;
+    color: white;
+}
+
+.no-results {
+    display: none;
+    text-align: center;
+    color: var(--text-dim);
+}
+
+.no-results td {
+    padding: 2rem;
+}
+
+@media (max-width: 900px) {
+    .stock-toolbar {
+        grid-template-columns: 1fr;
+    }
+}

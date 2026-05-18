@@ -22,9 +22,14 @@
     font-size: 2.5rem;
     font-weight: 800;
     margin: 0;
-    background: linear-gradient(to right, #fff, var(--text-dim));
-    
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
+    -webkit-text-fill-color: var(--text-main);
+}
+
+.partners-container .page-header .page-title h1 {
+    background: none !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
 }
 
 .page-title p {
@@ -333,7 +338,7 @@ select option {
 }
 .partner-toolbar {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     gap: 16px;
     align-items: center;
     margin-bottom: 24px;
@@ -381,6 +386,9 @@ select option {
 
 .partner-filter {
     min-width: 180px;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 
 .no-results {

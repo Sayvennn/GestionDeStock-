@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/stock.css' %}">
+<link rel="stylesheet" href="{% static 'css/stock.css' %}?v=5">
 {% endblock %}
 
 {% block content %}
@@ -23,7 +23,29 @@
             </a>
         </div>
     </div>
+    <div class="partner-toolbar stock-toolbar">
+        <div class="partner-switch" aria-label="Filtrer par type d'operation">
+            <button type="button" class="active" data-stock-type="all">Tous</button>
+            <button type="button" data-stock-type="ENTREE">Entrees</button>
+            <button type="button" data-stock-type="SORTIE">Sorties</button>
+        </div>
 
+        <div class="partner-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+                type="text"
+                id="stockSearch"
+                placeholder="Rechercher par ID, partenaire, employe, produit..."
+            >
+        </div>
+
+        <select id="stockStatusFilter" class="partner-filter" aria-label="Filtrer par statut">
+            <option value="all">Tous les statuts</option>
+            {% for valeur, libelle in statuts %}
+                <option value="{{ valeur }}">{{ libelle }}</option>
+            {% endfor %}
+        </select>
+    </div>
     <div class="glass-card">
         <table class="modern-table">
             <thead>
@@ -38,9 +60,9 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="stockOperationsBody">
                 {% for item in operations %}
-                <tr class="stock-row">
+                <tr class="stock-row" data-type="{{ item.type }}" data-status="{{ item.objet.statut }}" data-search="#{{ item.objet.pk }} {{ item.type }} {% if item.partenaire %}{{ item.partenaire.nom }}{% endif %} {{ item.objet.employe.username }} {{ item.objet.get_statut_display }} {% for ligne in item.objet.lignes.all %}{{ ligne.produit.nom }} {{ ligne.produit.reference }} {% endfor %}">
                     <td>#{{ item.objet.pk }}</td>
 
                     <td>
@@ -94,15 +116,19 @@
                         {% endif %}
                     </td>
                 </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="empty-cell">
-                        Aucune opération trouvée.
-                    </td>
-                </tr>
                 {% endfor %}
+
+
+
+                <tr id="noStockResults" class="no-results">
+                    <td colspan="7">Aucune operation ne correspond a votre recherche.</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/stock.js' %}?v=5"></script>
 {% endblock %}

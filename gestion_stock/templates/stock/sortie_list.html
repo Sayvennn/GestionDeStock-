@@ -7,6 +7,12 @@
 
 {% block content %}
 <div class="fade-in">
+    <div class="form-back-row">
+        <a href="{% url 'stock:operation_list' %}" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Retour aux operations
+        </a>
+    </div>
+
     <div class="stock-header">
         <div>
             <h1>Bons de Livraison</h1>
