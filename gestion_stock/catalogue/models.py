@@ -31,3 +31,8 @@ class Produit(models.Model):
 
     def __str__(self):
         return f"{self.nom} ({self.reference})"
+
+    def save(self, *args, **kwargs):
+        if self.reference and Produit.objects.filter(reference=self.reference).exclude(pk=self.pk).exists():
+            raise ValueError("La référence doit être unique.")
+        super().save(*args, **kwargs)

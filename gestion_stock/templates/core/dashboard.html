@@ -2,84 +2,99 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}?v=7">
 {% endblock %}
 
 {% block content %}
 <div class="fade-in">
     <div class="dashboard-header">
-        <h1>Vue d'ensemble</h1>
-        <p>
-            Ravi de vous revoir,
-            <span>{{ user.username }}</span>.
-        </p>
+        <div>
+            <h1>Vue d'ensemble</h1>
+            <p>
+                Les indicateurs essentiels pour suivre le stock, les alertes et les operations.
+            </p>
+        </div>
+
+        <!-- <div class="dashboard-actions">
+            <a href="{% url 'stock:operation_list' %}" class="app-btn">
+                <i class="fa-solid fa-clipboard-list"></i> Operations
+            </a>
+            <a href="{% url 'catalogue:produit_list' %}" class="app-btn success">
+                <i class="fa-solid fa-boxes-stacked"></i> Inventaire
+            </a>
+        </div> -->
     </div>
 
-    <div class="stats-grid">
-        <div class="glass-card stat-card stat-primary">
-            <div class="stat-label">Actifs en Stock</div>
-            <div class="counter stat-number" data-target="{{ total_produits }}">0</div>
-
-            <div class="mini-chart">
-                <div class="chart-bar chart-40"></div>
-                <div class="chart-bar chart-70"></div>
-                <div class="chart-bar chart-50"></div>
-                <div class="chart-bar chart-90"></div>
-                <div class="chart-bar chart-60"></div>
-            </div>
-
-            <i class="fa-solid fa-box stat-icon"></i>
+    <section class="dashboard-section">
+        <div class="dashboard-section-title">
+            <h2>Indicateurs importants</h2>
         </div>
 
-        <div class="glass-card stat-card stat-danger">
-            <div class="stat-label">Points de Rupture</div>
-            <div class="counter stat-number danger-number" data-target="{{ alertes_stock }}">0</div>
-
-            <div class="alert-pill">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                Action requise
+        <div class="stats-grid important-stats-grid">
+            <div class="glass-card stat-card stat-primary">
+                <div class="stat-label">Produits enregistres</div>
+                <div class="counter stat-number" data-target="{{ total_produits }}">0</div>
+                <!-- <p class="stat-explain">Nombre de references produits disponibles dans le catalogue.</p> -->
+                <i class="fa-solid fa-box stat-icon"></i>
             </div>
 
-            <i class="fa-solid fa-bell-concierge stat-icon"></i>
-        </div>
-
-        <div class="glass-card stat-card stat-success">
-            <div class="stat-label">Segmentation</div>
-            <div class="counter stat-number" data-target="{{ total_categories }}">0</div>
-
-            <div class="dot-row">
-                <div class="dot dot-success"></div>
-                <div class="dot dot-primary"></div>
-                <div class="dot dot-muted"></div>
+            <div class="glass-card stat-card stat-primary">
+                <div class="stat-label">Stock total</div>
+                <div class="counter stat-number" data-target="{{ total_stock }}">0</div>
+                <!-- <p class="stat-explain">Somme de toutes les quantites actuellement disponibles.</p> -->
+                <i class="fa-solid fa-cubes-stacked stat-icon"></i>
             </div>
 
-            <i class="fa-solid fa-layer-group stat-icon"></i>
-        </div>
-    </div>
-
-    <div class="charts-grid">
-        <div class="glass-card chart-card">
-            <div class="chart-header">
-                <div>
-                    <h3>Importations</h3>
-                    <p>Entrées de stock par rapport au temps</p>
+            <div class="glass-card stat-card stat-danger">
+                <div class="stat-label">Alertes stock</div>
+                <div class="counter stat-number danger-number" data-target="{{ alertes_stock }}">0</div>
+                <!-- <p class="stat-explain">Produits dont la quantite est inferieure ou egale au seuil d'alerte.</p> -->
+                <div class="alert-pill">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Action requise
                 </div>
-                <i class="fa-solid fa-arrow-trend-up"></i>
+                <i class="fa-solid fa-bell-concierge stat-icon"></i>
             </div>
-            <canvas id="importChart"></canvas>
+
+            <div class="glass-card stat-card stat-warning">
+                <div class="stat-label">Operations brouillon</div>
+                <div class="counter stat-number warning-number" data-target="{{ operations_brouillon }}">0</div>
+                <!-- <p class="stat-explain">Operations creees mais pas encore validees. Elles ne modifient pas le stock.</p> -->
+                <i class="fa-solid fa-pen-ruler stat-icon"></i>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-section">
+        <div class="dashboard-section-title">
+            <h2>Evolution des mouvements</h2>
+            <p>Ces diagrammes comparent les entrees et sorties validees dans le temps.</p>
         </div>
 
-        <div class="glass-card chart-card">
-            <div class="chart-header">
-                <div>
-                    <h3>Exportations</h3>
-                    <p>Sorties de stock par rapport au temps</p>
+        <div class="charts-grid charts-grid-two">
+            <div class="glass-card chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Importations</h3>
+                        <p>Quantites ajoutees au stock apres validation des entrees.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-trend-up"></i>
                 </div>
-                <i class="fa-solid fa-arrow-trend-down"></i>
+                <canvas id="importChart"></canvas>
             </div>
-            <canvas id="exportChart"></canvas>
+
+            <div class="glass-card chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h3>Exportations</h3>
+                        <p>Quantites retirees du stock apres validation des sorties.</p>
+                    </div>
+                    <i class="fa-solid fa-arrow-trend-down"></i>
+                </div>
+                <canvas id="exportChart"></canvas>
+            </div>
         </div>
-    </div>
+    </section>
 
     <div id="chart-data" style="display: none;">
         {% for point in chart_points %}
@@ -91,57 +106,47 @@
         {% endfor %}
     </div>
 
-    <div class="glass-card system-card">
-        <div>
-            <h3>Système Opérationnel</h3>
-            <p>
-                Toutes les synchronisations sont actives. Votre inventaire contient actuellement
-                {{ total_produits }} références réparties sur {{ total_categories }} catégories.
-            </p>
+    <section class="glass-card rupture-card">
+        <div class="table-card-header table-card-header-plain">
+            <div>
+                <h3>Produits a surveiller</h3>
+                <p>Liste des produits en rupture ou proches du seuil. Ce sont les priorites de reapprovisionnement.</p>
+            </div>
+            <a href="{% url 'catalogue:produit_list' %}" class="app-btn success">
+                <i class="fa-solid fa-boxes-stacked"></i> Inventaire
+            </a>
         </div>
 
-        <div class="system-time">
-            <div>Dernière mise à jour</div>
-            <strong id="current-time">--:--:--</strong>
-        </div>
-    </div>
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Reference</th>
+                    <th>Stock</th>
+                    <th>Seuil</th>
+                    <th>Fournisseur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produits_rupture %}
+                <tr>
+                    <td>{{ produit.nom }}</td>
+                    <td>{{ produit.reference }}</td>
+                    <td class="danger-cell">{{ produit.quantite_stock }}</td>
+                    <td>{{ produit.seuil_alerte }}</td>
+                    <td>{{ produit.fournisseur.nom }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="dashboard-empty">Aucun produit en alerte.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 </div>
-<div class="glass-card rupture-card">
-    <h3>Produits en rupture ou alerte</h3>
-
-    <table class="modern-table">
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Référence</th>
-                <th>Stock</th>
-                <th>Seuil</th>
-                <th>Fournisseur</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for produit in produits_rupture %}
-            <tr>
-                <td>{{ produit.nom }}</td>
-                <td>{{ produit.reference }}</td>
-                <td style="color: #f87171; font-weight: 800;">{{ produit.quantite_stock }}</td>
-                <td>{{ produit.seuil_alerte }}</td>
-                <td>{{ produit.fournisseur.nom }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" style="text-align:center; color: var(--text-dim); padding: 2rem;">
-                    Aucun produit en rupture.
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}?v=8"></script>
 {% endblock %}

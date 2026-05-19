@@ -11,9 +11,9 @@
         <div>
             <h2>
                 <i class="fa-solid fa-box-archive"></i>
-                Catalogue Produits
+                Produits
             </h2>
-            <p>Produits, références, catégories, fournisseurs et prix.</p>
+            <p>Produits, références, catégories, fournisseurs et quantités en stock.</p>
         </div>
 
         <div class="catalogue-actions-row">
@@ -51,12 +51,16 @@
                 <td>{{ produit.reference }}</td>
                 <td>{{ produit.categorie.nom }}</td>
                 <td>{{ produit.fournisseur.nom }}</td>
-                <td>{{produit.quantite_stock}}</td>
+                <td>
+                    <span class="stock-pill {% if produit.quantite_stock <= produit.seuil_alerte %}stock-low{% else %}stock-ok{% endif %}">
+                        {{ produit.quantite_stock }}
+                    </span>
+                </td>
                 <td><strong>{{ produit.prix }} DH</strong></td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="5" class="empty-cell">
+                <td colspan="6" class="empty-cell">
                     Aucun produit trouvé.
                 </td>
             </tr>

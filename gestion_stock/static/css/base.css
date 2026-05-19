@@ -146,7 +146,7 @@ body {
     border-bottom: 1px solid var(--glass-border);
     position: sticky;
     top: 0;
-    z-index: 90;
+    z-index: 200;
 }
 
 .search-trigger {
@@ -158,6 +158,10 @@ body {
     font-size: 1.2rem;
 }
 
+.user-menu {
+    position: relative;
+}
+
 .user-profile {
     display: flex;
     align-items: center;
@@ -166,6 +170,9 @@ body {
     background: var(--glass);
     border-radius: 12px;
     border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    cursor: pointer;
+    font-family: inherit;
 }
 
 .user-info {
@@ -194,6 +201,51 @@ body {
     border: 2px solid var(--bg-dark);
 }
 
+.user-dropdown {
+    position: fixed;
+    top: 72px;
+    right: 3rem;
+    width: 210px;
+    display: none;
+    padding: 8px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    background: #0f172a;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    z-index: 300;
+}
+
+.user-menu.open .user-dropdown {
+    display: block;
+}
+
+.user-dropdown a,
+.user-dropdown button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+}
+
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+.user-dropdown form {
+    margin: 0;
+}
+
 .content-area {
     padding: 3rem;
     animation: pageTransition 0.6s ease-out;
@@ -205,6 +257,65 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: 20px;
     padding: 2rem;
+}
+
+.app-btn,
+.stock-action-btn,
+.catalogue-btn,
+.add-btn,
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    background: rgba(139, 92, 246, 0.08);
+    color: var(--primary-light);
+    font-size: 0.78rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.app-btn:hover,
+.stock-action-btn:hover,
+.catalogue-btn:hover,
+.add-btn:hover,
+.back-link:hover {
+    border-color: rgba(139, 92, 246, 0.75);
+    background: rgba(139, 92, 246, 0.16);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.app-btn.danger,
+.sortie-link {
+    border-color: rgba(244, 63, 94, 0.35);
+    background: rgba(244, 63, 94, 0.08);
+    color: #fb7185;
+}
+
+.app-btn.success,
+.entree-link {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: rgba(16, 185, 129, 0.08);
+    color: #34d399;
+}
+
+.form-back-row {
+    margin-bottom: 18px;
+}
+
+.stock-form-card > .back-link,
+.catalogue-form-card > .back-link,
+.partner-form-card > .back-link,
+.receipt-header > .back-link {
+    margin-bottom: 18px;
 }
 
 .fade-in {

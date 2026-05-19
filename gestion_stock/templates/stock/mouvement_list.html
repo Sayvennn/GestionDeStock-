@@ -10,18 +10,8 @@
     <div class="stock-header">
         <div>
             <h1>Flux Logistique</h1>
-            <p>Traçabilité complète des actifs</p>
+            <p>Tracabilité complete des actifs</p>
         </div>
-<!-- 
-        <div class="stock-actions">
-            <a href="{% url 'stock:entree_add' %}" class="stock-action-btn entree-link">
-                <i class="fa-solid fa-arrow-trend-up"></i> Entrée Stock
-            </a>
-
-            <a href="{% url 'stock:sortie_add' %}" class="stock-action-btn sortie-link">
-                <i class="fa-solid fa-arrow-trend-down"></i> Sortie Stock
-            </a>
-        </div> -->
     </div>
 
     <div class="glass-card table-shell">
@@ -30,7 +20,7 @@
                 <tr>
                     <th>Horodatage</th>
                     <th>Flux</th>
-                    <th>Désignation Article</th>
+                    <th>Designation Article</th>
                     <th>Volume</th>
                     <th>Opérateur</th>
                     <th class="text-right">Statut</th>
@@ -72,12 +62,12 @@
                     </td>
 
                     <td class="text-right certified">
-                        <i class="fa-solid fa-shield-check"></i> CERTIFIÉ
+                        <i class="fa-solid fa-shield-check"></i> certified
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="empty-cell">Aucun mouvement trouvé.</td>
+                    <td colspan="6" class="empty-cell">Aucun mouvement trouvée.</td>
                 </tr>
                 {% endfor %}
             </tbody>

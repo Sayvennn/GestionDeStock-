@@ -23,9 +23,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if (window.location.pathname.includes("dashboard")) {
-        setTimeout(() => {
-            console.log("Bienvenue dans votre espace Premium.");
-        }, 1000);
+    const userMenu = document.querySelector(".user-menu");
+    const userMenuToggle = document.getElementById("userMenuToggle");
+
+    if (userMenu && userMenuToggle) {
+        userMenuToggle.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const isOpen = userMenu.classList.toggle("open");
+            userMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        });
+
+        document.addEventListener("click", (event) => {
+            if (!userMenu.contains(event.target)) {
+                userMenu.classList.remove("open");
+                userMenuToggle.setAttribute("aria-expanded", "false");
+            }
+        });
     }
 });

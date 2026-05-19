@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}STOCK.IO | Premium Management{% endblock %}</title>
+    <title>{% block title %}Stockify| Premium Management{% endblock %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=3">
 
     {% block extra_css %}{% endblock %}
 </head>
@@ -18,7 +18,7 @@
             <div class="brand-icon">
                 <i class="fa-solid fa-cube"></i>
             </div>
-            STOCK.IO
+            Stockify
         </div>
 
         <ul class="nav-links">
@@ -36,7 +36,7 @@
             </li>
 <li class="nav-item">
     <a href="{% url 'stock:operation_list' %}" class="nav-link {% if request.resolver_match.url_name == 'operation_list' %}active{% endif %}">
-        <i class="fa-solid fa-clipboard-list"></i> Opérations Stock
+        <i class="fa-solid fa-clipboard-list"></i> Operations Stock
     </a>
 </li>
 
@@ -56,8 +56,8 @@
             </li>
 
             <li class="nav-item nav-separator">
-                <a href="#" class="nav-link">
-                    <i class="fa-solid fa-gear"></i> Paramètres
+                <a href="{% url 'parametres' %}" class="nav-link {% if request.resolver_match.url_name == 'parametres' %}active{% endif %}">
+                    <i class="fa-solid fa-gear"></i> Parametres
                 </a>
             </li>
         </ul>
@@ -66,7 +66,7 @@
             <form method="post" action="{% url 'accounts:logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="nav-link logout-btn">
-                    <i class="fa-solid fa-power-off"></i> Déconnexion
+                    <i class="fa-solid fa-power-off"></i> Deconnexion
                 </button>
             </form>
         </div>
@@ -78,14 +78,28 @@
                 <i class="fa-solid fa-bars" id="toggleSidebar"></i>
             </div>
 
-            <div class="user-profile">
-                <div class="user-info">
-                    <div class="user-name">{{ user.username|upper }}</div>
-                    <div class="user-status">Connecté • Admin</div>
-                </div>
+            <div class="user-menu">
+                <button type="button" class="user-profile" id="userMenuToggle" aria-expanded="false">
+                    <div class="user-info">
+                        <div class="user-name">{{ user.username|upper }}</div>
+                        <div class="user-status">Connecte - {% if user.is_superuser %}Admin{% else %}Employe{% endif %}</div>
+                    </div>
 
-                <div class="user-avatar">
-                    {{ user.username|slice:":1"|upper }}
+                    <div class="user-avatar">
+                        {{ user.username|slice:":1"|upper }}
+                    </div>
+                </button>
+
+                <div class="user-dropdown" id="userDropdown">
+                    <a href="{% url 'parametres' %}">
+                        <i class="fa-solid fa-gear"></i> Parametres
+                    </a>
+                    <form method="post" action="{% url 'accounts:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">
+                            <i class="fa-solid fa-power-off"></i> Deconnexion
+                        </button>
+                    </form>
                 </div>
             </div>
         </header>
@@ -95,8 +109,9 @@
             {% endblock %}
         </main>
     </div>
+    
 
-    <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'js/base.js' %}?v=3"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

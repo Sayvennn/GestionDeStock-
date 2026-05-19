@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/parametres.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="fade-in settings-page">
+    <div class="settings-header">
+        <div>
+            <h1>Parametres</h1>
+            <p>Vue de configuration et de controle de Stockify.</p>
+        </div>
+    </div>
+
+    <div class="settings-grid">
+        <section class="glass-card settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-user-shield"></i>
+                <h2>Compte connecte</h2>
+            </div>
+
+            <div class="settings-list">
+                <div>
+                    <span>Utilisateur</span>
+                    <strong>{{ user.username }}</strong>
+                </div>
+                <div>
+                    <span>Role</span>
+                    <strong>{% if user.is_superuser %}Administrateur{% else %}Employe{% endif %}</strong>
+                </div>
+                <div>
+                    <span>Creation des comptes</span>
+                    <strong>Administrateur uniquement</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <h2>Regles de stock</h2>
+            </div>
+
+            <ul class="rules-list">
+                <li>Une operation commence toujours en brouillon.</li>
+                <li>Un brouillon ne modifie pas le stock.</li>
+                <li>La validation cree un mouvement et met a jour le produit.</li>
+                <li>Une sortie est bloquee si la quantite disponible est insuffisante.</li>
+            </ul>
+        </section>
+
+        <section class="glass-card settings-card settings-card-wide">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-pen-ruler"></i>
+                <h2>Operations en attente</h2>
+            </div>
+
+            <div class="settings-stats">
+                <div><strong>{{ operations_brouillon }}</strong><span>Total brouillons</span></div>
+                <div><strong>{{ entrees_brouillon }}</strong><span>Entrees brouillon</span></div>
+                <div><strong>{{ sorties_brouillon }}</strong><span>Sorties brouillon</span></div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

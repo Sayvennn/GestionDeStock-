@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Partenaires | STOCK.IO{% endblock %}
+{% block title %}Partenaires | Stockify{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/partenaires.css' %}">
+<link rel="stylesheet" href="{% static 'css/partenaires.css' %}?v=3">
 {% endblock %}
 
 {% block content %}
@@ -41,11 +41,6 @@
             <input type="text" id="partnerSearch" placeholder="Rechercher par nom, email, téléphone...">
         </div>
 
-        <select id="partnerTypeFilter" class="partner-filter">
-            <option value="all">Tous les types</option>
-            <option value="Client">Clients</option>
-            <option value="Fournisseur">Fournisseurs</option>
-        </select>
     </div>
 
     <div class="table-card">
@@ -192,5 +187,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/partenaires.js' %}"></script>
+<script src="{% static 'js/partenaires.js' %}?v=2"></script>
 {% endblock %}
